@@ -1,0 +1,14 @@
+{
+  "name": "liveclass-quiz",
+  "version": "1.0.0",
+  "description": "LiveClass Quiz - Full-Stack Real-Time College Classroom Quiz Platform",
+  "scripts": {
+    "setup": "cd backend && npm install && npx prisma generate && npx prisma db push && node prisma/seed.js && cd ../frontend && npm install",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": ["classroom", "quiz", "real-time", "socketio", "college", "professor", "coding-judge"],
+  "author": "Google DeepMind / Antigravity",
+  "license": "MIT"
+}

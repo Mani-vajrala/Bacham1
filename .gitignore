@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production builds
+dist/
+build/
+*/dist/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# SQLite Database & Prisma generated files
+dev.db
+dev.db-journal
+backend/dev.db
+backend/dev.db-journal
+*.db
+*.db-journal
+
+# Temporary directories and logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+
+# IDE configuration
+.vscode/
+.idea/
+*.swp
+*.swo
