@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Award, CheckCircle2, XCircle, Clock, Home, Zap, Loader2 } from 'lucide-react';
+import { API_BASE } from '../../config';
 
 export default function StudentResult() {
   const { id: sessionId } = useParams();
@@ -16,7 +17,7 @@ export default function StudentResult() {
   })();
 
   useEffect(() => {
-    fetch(`/api/sessions/${sessionId}/results`)
+    fetch(`${API_BASE}/sessions/${sessionId}/results`)
       .then((res) => res.json())
       .then((resData) => {
         setData(resData);

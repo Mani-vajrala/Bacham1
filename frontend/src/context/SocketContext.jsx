@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { BACKEND_URL } from '../config';
 
 const SocketContext = createContext();
 
@@ -9,8 +10,9 @@ export function SocketProvider({ children }) {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    // Connect to server (proxied or direct)
-    const newSocket = io(window.location.origin, {
+    // Connect to server (dynamic backend URL for Vercel, or local proxy)
+    const targetUrl = BACKEND_URL || window.location.origin;
+    const newSocket = io(targetUrl, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 10,
       reconnectionDelay: 1000

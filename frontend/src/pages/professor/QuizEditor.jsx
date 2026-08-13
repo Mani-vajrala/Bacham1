@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config';
 import {
   Save,
   Plus,
@@ -62,7 +63,7 @@ export default function QuizEditor() {
 
   const fetchQuiz = async () => {
     try {
-      const res = await fetch(`/api/quizzes/${id}`, {
+      const res = await fetch(`${API_BASE}/quizzes/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -214,7 +215,7 @@ export default function QuizEditor() {
         }))
       };
 
-      const url = isEditing ? `/api/quizzes/${id}` : '/api/quizzes';
+      const url = isEditing ? `${API_BASE}/quizzes/${id}` : `${API_BASE}/quizzes`;
       const method = isEditing ? 'PUT' : 'POST';
 
       const res = await fetch(url, {

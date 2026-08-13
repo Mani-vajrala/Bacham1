@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config';
 import {
   FolderKanban,
   PlusCircle,
@@ -29,7 +30,7 @@ export default function QuizList() {
 
   const fetchQuizzes = async () => {
     try {
-      const res = await fetch('/api/quizzes', {
+      const res = await fetch(`${API_BASE}/quizzes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -44,7 +45,7 @@ export default function QuizList() {
   const handleLaunch = async (quizId) => {
     setActionLoadingId(quizId);
     try {
-      const res = await fetch('/api/sessions/start', {
+      const res = await fetch(`${API_BASE}/sessions/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ export default function QuizList() {
   const handleDuplicate = async (quizId) => {
     setActionLoadingId(quizId);
     try {
-      const res = await fetch(`/api/quizzes/${quizId}/duplicate`, {
+      const res = await fetch(`${API_BASE}/quizzes/${quizId}/duplicate`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -86,7 +87,7 @@ export default function QuizList() {
     if (!window.confirm('Are you sure you want to delete this quiz?')) return;
     setActionLoadingId(quizId);
     try {
-      const res = await fetch(`/api/quizzes/${quizId}`, {
+      const res = await fetch(`${API_BASE}/quizzes/${quizId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });

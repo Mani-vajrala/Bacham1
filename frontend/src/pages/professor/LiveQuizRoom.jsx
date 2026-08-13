@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useSocket } from '../../context/SocketContext';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config';
 import TimerBadge from '../../components/common/TimerBadge';
 import Modal from '../../components/common/Modal';
 import {
@@ -67,7 +68,7 @@ export default function LiveQuizRoom() {
 
   const fetchSessionDetails = async () => {
     try {
-      const res = await fetch(`/api/sessions/${sessionId}/details`, {
+      const res = await fetch(`${API_BASE}/sessions/${sessionId}/details`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();

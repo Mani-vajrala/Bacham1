@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config';
 import {
   Zap,
   FolderKanban,
@@ -29,7 +30,7 @@ export default function ProfessorDashboard() {
 
   const fetchQuizzes = async () => {
     try {
-      const res = await fetch('/api/quizzes', {
+      const res = await fetch(`${API_BASE}/quizzes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -46,7 +47,7 @@ export default function ProfessorDashboard() {
   const handleLaunchLive = async (quizId) => {
     setStartingQuizId(quizId);
     try {
-      const res = await fetch('/api/sessions/start', {
+      const res = await fetch(`${API_BASE}/sessions/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

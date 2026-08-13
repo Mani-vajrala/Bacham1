@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Play, Send, RotateCcw, Terminal, CheckCircle2, XCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { API_BASE } from '../../config';
 
 export default function CodeEditor({
   code,
@@ -42,7 +43,7 @@ export default function CodeEditor({
     setIsRunning(true);
     setRunOutput(null);
     try {
-      const res = await fetch('/api/code/run', {
+      const res = await fetch(`${API_BASE}/code/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

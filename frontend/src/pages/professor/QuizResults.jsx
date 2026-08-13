@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Podium from '../../components/common/Podium';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config';
 import {
   Download,
   Award,
@@ -30,7 +31,7 @@ export default function QuizResults() {
 
   const fetchResults = async () => {
     try {
-      const res = await fetch(`/api/sessions/${sessionId}/results`, {
+      const res = await fetch(`${API_BASE}/sessions/${sessionId}/results`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const resData = await res.json();
@@ -47,7 +48,7 @@ export default function QuizResults() {
   const handleDownloadCsv = async () => {
     setDownloading(true);
     try {
-      const res = await fetch(`/api/sessions/${sessionId}/export-csv`, {
+      const res = await fetch(`${API_BASE}/sessions/${sessionId}/export-csv`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const blob = await res.blob();
