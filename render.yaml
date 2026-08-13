@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: liveclass-quiz-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npx prisma db push && node prisma/seed.js
+    startCommand: node src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: JWT_SECRET
+        value: liveclass_quiz_jwt_secret_key_super_secure_2026
