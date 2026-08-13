@@ -32,35 +32,67 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = async (email, password) => {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Login failed');
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error(
+          'Backend server is not reachable. If on Vercel, please configure VITE_BACKEND_URL with your live Render backend URL.'
+        );
+      }
 
-    localStorage.setItem('liveclass_token', data.token);
-    setToken(data.token);
-    setProfessor(data.professor);
-    return data;
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Login failed');
+
+      localStorage.setItem('liveclass_token', data.token);
+      setToken(data.token);
+      setProfessor(data.professor);
+      return data;
+    } catch (err) {
+      if (err.message.includes('JSON')) {
+        throw new Error(
+          'Backend server is not reachable. Please ensure your backend is running or set VITE_BACKEND_URL.'
+        );
+      }
+      throw err;
+    }
   };
 
   const register = async (name, email, password, department) => {
-    const res = await fetch(`${API_BASE}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, department })
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, department })
+      });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Registration failed');
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error(
+          'Backend server is not reachable. If on Vercel, please configure VITE_BACKEND_URL with your live Render backend URL.'
+        );
+      }
 
-    localStorage.setItem('liveclass_token', data.token);
-    setToken(data.token);
-    setProfessor(data.professor);
-    return data;
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Registration failed');
+
+      localStorage.setItem('liveclass_token', data.token);
+      setToken(data.token);
+      setProfessor(data.professor);
+      return data;
+    } catch (err) {
+      if (err.message.includes('JSON')) {
+        throw new Error(
+          'Backend server is not reachable. Please ensure your backend is running or set VITE_BACKEND_URL.'
+        );
+      }
+      throw err;
+    }
   };
 
   const logout = () => {
