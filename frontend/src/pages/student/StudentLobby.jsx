@@ -42,7 +42,10 @@ export default function StudentLobby() {
       setTotalOnline(count);
     });
 
-    socket.on('question_started', () => {
+    socket.on('question_started', (data) => {
+      if (data && data.question) {
+        sessionStorage.setItem('liveclass_active_question', JSON.stringify(data));
+      }
       navigate(`/student/quiz/${sessionId}`);
     });
 

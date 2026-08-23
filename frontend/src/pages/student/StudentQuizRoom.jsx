@@ -30,18 +30,27 @@ export default function StudentQuizRoom() {
     }
   });
 
-  const [question, setQuestion] = useState(null);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(1);
-  const [remainingSec, setRemainingSec] = useState(30);
-  const [timeLimit, setTimeLimit] = useState(30);
+  // Initialize question state from sessionStorage if navigated from Lobby/Join
+  const cachedActiveQ = (() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('liveclass_active_question') || 'null');
+    } catch (_) {
+      return null;
+    }
+  })();
+
+  const [question, setQuestion] = useState(cachedActiveQ?.question || null);
+  const [questionIndex, setQuestionIndex] = useState(cachedActiveQ?.questionIndex || 0);
+  const [totalQuestions, setTotalQuestions] = useState(cachedActiveQ?.totalQuestions || 1);
+  const [remainingSec, setRemainingSec] = useState(cachedActiveQ?.remainingSec || cachedActiveQ?.timeLimit || 30);
+  const [timeLimit, setTimeLimit] = useState(cachedActiveQ?.timeLimit || 30);
   const [isPaused, setIsPaused] = useState(false);
 
   // Student answer inputs
   const [selectedOptionIds, setSelectedOptionIds] = useState([]);
   const [answerText, setAnswerText] = useState('');
-  const [code, setCode] = useState('');
-  const [codingLanguage, setCodingLanguage] = useState('python');
+  const [code, setCode] = useState(cachedActiveQ?.question?.starterCode || '');
+  const [codingLanguage, setCodingLanguage] = useState(cachedActiveQ?.question?.codingLanguage || 'python');
 
   // Submission state
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -60,7 +69,9 @@ export default function StudentQuizRoom() {
     if (!socket) return;
 
     // Listen for question push from professor
-    socket.on('question_started', ({ question: q, questionIndex: qIdx, totalQuestions: tq, timeLimit: tl }) => {
+    const handleQuestionStarted = (data) => {
+      const { question: q, questionIndex: qIdx, totalQuestions: tq, timeLimit: tl } = data;
+      sessionStorage.setItem('liveclass_active_question', JSON.stringify(data));
       setQuestion(q);
       setQuestionIndex(qIdx);
       setTotalQuestions(tq);
@@ -68,14 +79,16 @@ export default function StudentQuizRoom() {
       setTimeLimit(tl);
       setIsPaused(false);
 
-      // Reset student inputs
+      // Reset student inputs for new question
       setSelectedOptionIds([]);
       setAnswerText('');
       setCode(q.starterCode || '');
       setCodingLanguage(q.codingLanguage || 'python');
       setIsSubmitted(false);
       setConfirmedResult(null);
-    });
+    };
+
+    socket.on('question_started', handleQuestionStarted);
 
     socket.on('timer_tick', ({ remainingSec: sec }) => {
       setRemainingSec(sec);

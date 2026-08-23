@@ -29,8 +29,19 @@ export default function StudentJoin() {
       sessionStorage.setItem('liveclass_session', JSON.stringify(session));
 
       if (session.status === 'ACTIVE' && activeQuestion) {
+        sessionStorage.setItem(
+          'liveclass_active_question',
+          JSON.stringify({
+            question: activeQuestion,
+            questionIndex: session.currentQuestionIndex || 0,
+            totalQuestions: 1,
+            timeLimit: activeQuestion.timeLimit || 30,
+            remainingSec: activeQuestion.remainingSec || activeQuestion.timeLimit || 30
+          })
+        );
         navigate(`/student/quiz/${session.id}`);
       } else {
+        sessionStorage.removeItem('liveclass_active_question');
         navigate(`/student/lobby/${session.id}`);
       }
     });
