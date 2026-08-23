@@ -151,6 +151,12 @@ class SandboxService {
   async _runPython(code, input, tempDir) {
     const filePath = path.join(tempDir, 'solution.py');
     await fs.writeFile(filePath, code, 'utf8');
+
+    // Try python3 first, fallback to python
+    const py3Res = await this._spawnProcess('python3', ['-u', filePath], input, tempDir);
+    if (py3Res.status !== 'ERROR' || !py3Res.stderr.includes('ENOENT')) {
+      return py3Res;
+    }
     return await this._spawnProcess('python', ['-u', filePath], input, tempDir);
   }
 
