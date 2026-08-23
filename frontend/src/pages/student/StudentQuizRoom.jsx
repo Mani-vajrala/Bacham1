@@ -52,10 +52,11 @@ export default function StudentQuizRoom() {
   const [code, setCode] = useState(cachedActiveQ?.question?.starterCode || '');
   const [codingLanguage, setCodingLanguage] = useState(cachedActiveQ?.question?.codingLanguage || 'python');
 
-  // Submission state
+  // Submission & Revealed Answer state
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedResult, setConfirmedResult] = useState(null);
+  const [revealedAnswerData, setRevealedAnswerData] = useState(null);
 
   // Anti-cheat alert
   const [showTabWarning, setShowTabWarning] = useState(false);
@@ -86,6 +87,7 @@ export default function StudentQuizRoom() {
       setCodingLanguage(q.codingLanguage || 'python');
       setIsSubmitted(false);
       setConfirmedResult(null);
+      setRevealedAnswerData(null);
     };
 
     socket.on('question_started', handleQuestionStarted);
@@ -111,16 +113,22 @@ export default function StudentQuizRoom() {
       setConfirmedResult(result);
     });
 
+    socket.on('question_ended', (data) => {
+      setIsSubmitted(true);
+      setRevealedAnswerData(data);
+    });
+
     socket.on('quiz_ended', () => {
       navigate(`/student/results/${sessionId}`);
     });
 
     return () => {
-      socket.off('question_started');
+      socket.off('question_started', handleQuestionStarted);
       socket.off('timer_tick');
       socket.off('timer_pause_toggled');
       socket.off('question_time_up');
       socket.off('submission_confirmed');
+      socket.off('question_ended');
       socket.off('quiz_ended');
     };
   }, [socket, sessionId, student, isSubmitted, navigate]);
@@ -238,6 +246,24 @@ export default function StudentQuizRoom() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {question.options?.map((opt, idx) => {
               const isSelected = selectedOptionIds.includes(opt.id);
+              const isCorrectOption = revealedAnswerData?.correctOptionIds?.includes(opt.id);
+              const isRevealed = !!revealedAnswerData;
+
+              let borderStyle = `2px solid ${isSelected ? 'var(--accent-primary)' : 'var(--border-color)'}`;
+              let bgStyle = isSelected
+                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.35) 100%)'
+                : 'var(--bg-tertiary)';
+
+              if (isRevealed) {
+                if (isCorrectOption) {
+                  borderStyle = '2px solid var(--success)';
+                  bgStyle = 'rgba(16, 185, 129, 0.22)';
+                } else if (isSelected && !isCorrectOption) {
+                  borderStyle = '2px solid var(--danger)';
+                  bgStyle = 'rgba(244, 63, 94, 0.22)';
+                }
+              }
+
               return (
                 <button
                   key={opt.id}
@@ -247,12 +273,8 @@ export default function StudentQuizRoom() {
                   style={{
                     padding: '16px 20px',
                     borderRadius: 'var(--radius-lg)',
-                    background: isSelected
-                      ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.35) 100%)'
-                      : 'var(--bg-tertiary)',
-                    border: `2px solid ${
-                      isSelected ? 'var(--accent-primary)' : 'var(--border-color)'
-                    }`,
+                    background: bgStyle,
+                    border: borderStyle,
                     color: 'var(--text-primary)',
                     display: 'flex',
                     alignItems: 'center',
@@ -269,7 +291,9 @@ export default function StudentQuizRoom() {
                         width: 32,
                         height: 32,
                         borderRadius: '50%',
-                        background: isSelected ? 'var(--accent-gradient)' : 'rgba(255, 255, 255, 0.1)',
+                        background: isRevealed && isCorrectOption
+                          ? 'var(--success)'
+                          : (isSelected ? 'var(--accent-gradient)' : 'rgba(255, 255, 255, 0.1)'),
                         color: '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
@@ -283,7 +307,21 @@ export default function StudentQuizRoom() {
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{opt.text}</span>
                   </div>
 
-                  {isSelected && <CheckCircle2 size={20} color="var(--accent-primary)" />}
+                  {isRevealed && isCorrectOption && (
+                    <span className="badge badge-success" style={{ gap: 4 }}>
+                      <CheckCircle2 size={14} />
+                      <span>Correct Answer</span>
+                    </span>
+                  )}
+
+                  {isRevealed && isSelected && !isCorrectOption && (
+                    <span className="badge badge-danger" style={{ gap: 4 }}>
+                      <XCircle size={14} />
+                      <span>Your Answer</span>
+                    </span>
+                  )}
+
+                  {!isRevealed && isSelected && <CheckCircle2 size={20} color="var(--accent-primary)" />}
                 </button>
               );
             })}
@@ -356,6 +394,27 @@ export default function StudentQuizRoom() {
               disabled={isSubmitted || remainingSec <= 0}
               style={{ fontSize: 15, lineHeight: 1.5 }}
             />
+          </div>
+        )}
+
+        {/* Answer Explanation Card */}
+        {revealedAnswerData?.explanation && (
+          <div
+            style={{
+              marginTop: 24,
+              padding: '16px 20px',
+              borderRadius: 'var(--radius-md)',
+              background: 'rgba(99, 102, 241, 0.12)',
+              border: '1.5px solid rgba(99, 102, 241, 0.35)',
+              textAlign: 'left'
+            }}
+          >
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--accent-primary)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>💡 Explanation & Answer Details</span>
+            </div>
+            <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.5 }}>
+              {revealedAnswerData.explanation}
+            </p>
           </div>
         )}
 
