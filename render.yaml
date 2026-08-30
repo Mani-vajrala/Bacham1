@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: liveclass-quiz-backend
+    name: class-connect-backend
     runtime: node
     rootDir: backend
     buildCommand: npm install && npx prisma generate && npx prisma db push && node prisma/seed.js
@@ -11,4 +11,4 @@ services:
       - key: DATABASE_URL
         value: file:./dev.db
       - key: JWT_SECRET
-        value: liveclass_quiz_jwt_secret_key_super_secure_2026
+        value: class_connect_jwt_secret_key_super_secure_2026

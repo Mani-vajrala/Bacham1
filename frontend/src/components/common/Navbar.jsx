@@ -80,18 +80,18 @@ export default function Navbar() {
                 WebkitTextFillColor: 'transparent'
               }}
             >
-              LiveClass
+              Class
             </span>
             <span
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 20,
                 fontWeight: 800,
-                marginLeft: 4,
+                marginLeft: 5,
                 color: 'var(--text-primary)'
               }}
             >
-              Quiz
+              Connect
             </span>
           </div>
         </Link>

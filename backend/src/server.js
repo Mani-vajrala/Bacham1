@@ -43,7 +43,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
     serverTime: new Date().toISOString(),
-    service: 'LiveClass Quiz API'
+    service: 'Class Connect API'
   });
 });
 
@@ -188,7 +188,7 @@ async function ensureDatabaseSeeded() {
 server.listen(config.port, async () => {
   await ensureDatabaseSeeded();
   console.log(`=========================================`);
-  console.log(`🚀 LiveClass Quiz Server running on port ${config.port}`);
+  console.log(`🚀 Class Connect Server running on port ${config.port}`);
   console.log(`🌐 Health check: http://localhost:${config.port}/api/health`);
   console.log(`=========================================`);
 });

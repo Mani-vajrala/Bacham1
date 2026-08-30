@@ -1,6 +1,6 @@
-# ⚡ LiveClass Quiz — Real-Time College Classroom Quiz Platform
+# ⚡ Class Connect — Real-Time College Classroom Quiz Platform
 
-**LiveClass Quiz** is a full-stack, real-time interactive quiz and live coding platform designed specifically for college professors and students. When a professor broadcasts a question, connected students instantly receive it on their phones or laptops. As answers arrive, the server orders submissions by exact millisecond arrival times to identify who answered first and who answered first correctly, with live leaderboard sync and secure sandboxed code execution.
+**Class Connect** is a full-stack, real-time interactive quiz and live coding platform designed specifically for college professors and students. When a professor broadcasts a question, connected students instantly receive it on their phones or laptops. As answers arrive, the server orders submissions by exact millisecond arrival times to identify who answered first and who answered first correctly, with live leaderboard sync and secure sandboxed code execution.
 
 ---
 

@@ -1,7 +1,7 @@
 {
-  "name": "liveclass-quiz",
+  "name": "class-connect",
   "version": "1.0.0",
-  "description": "LiveClass Quiz - Full-Stack Real-Time College Classroom Quiz Platform",
+  "description": "Class Connect - Full-Stack Real-Time College Classroom Platform",
   "scripts": {
     "setup": "cd backend && npm install && npx prisma generate && npx prisma db push && node prisma/seed.js && cd ../frontend && npm install",
     "backend": "cd backend && npm run dev",

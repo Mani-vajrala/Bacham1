@@ -1,7 +1,7 @@
 {
-  "name": "liveclass-quiz-backend",
+  "name": "class-connect-backend",
   "version": "1.0.0",
-  "description": "Real-Time LiveClass Quiz Backend",
+  "description": "Real-Time Class Connect Backend",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

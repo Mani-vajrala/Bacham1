@@ -33,7 +33,7 @@ export default function Home() {
           }}
         >
           <Zap size={15} color="var(--accent-primary)" />
-          <span>REAL-TIME CLASSROOM QUIZ & CODING PLATFORM</span>
+          <span>CLASS CONNECT — REAL-TIME CLASSROOM PLATFORM</span>
         </div>
 
         <h1
@@ -45,7 +45,6 @@ export default function Home() {
             letterSpacing: '-0.03em'
           }}
         >
-          Live Interactive Quizzes for{' '}
           <span
             style={{
               background: 'var(--accent-gradient)',
@@ -53,8 +52,9 @@ export default function Home() {
               WebkitTextFillColor: 'transparent'
             }}
           >
-            College Classrooms
-          </span>
+            Class Connect
+          </span>{' '}
+          for College Classrooms
         </h1>
 
         <p

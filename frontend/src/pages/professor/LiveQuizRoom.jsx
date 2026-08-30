@@ -747,7 +747,7 @@ export default function LiveQuizRoom() {
         <div style={{ textAlign: 'center', padding: '10px 0' }}>
           <div className="quiz-code-text" style={{ marginBottom: 12 }}>{session?.code}</div>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 20 }}>
-            Students can open LiveClass Quiz on their phone or laptop and enter code <strong>{session?.code}</strong>
+            Students can open <strong>Class Connect</strong> on their phone or laptop and enter code <strong>{session?.code}</strong>
           </p>
           <div
             style={{
