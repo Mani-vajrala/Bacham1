@@ -6,7 +6,7 @@
     "setup": "cd backend && npm install && npx prisma generate && npx prisma db push && node prisma/seed.js && cd ../frontend && npm install",
     "backend": "cd backend && npm run dev",
     "frontend": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build"
+    "build": "cd frontend && npm install && npm run build"
   },
   "keywords": ["classroom", "quiz", "real-time", "socketio", "college", "professor", "coding-judge"],
   "author": "Google DeepMind / Antigravity",
